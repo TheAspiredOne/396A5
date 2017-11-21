@@ -9,12 +9,11 @@ v = None #root value in view of player to move
 best_move = None
 t = 0# number of terminal nodes
 nt = 0 # number of non terminal nodes
-move_values = {}
 
 
 
-def NegaMax(state, height):
-	global COL, ROW, c, v, best_move, t, nt, move_values
+def AlphaBeta(state, height,alpha,beta):
+	global COL, ROW, c, v, best_move, t, nt
 
 	name, player_to_move, board = state #unpack the tuple
 	move=None
@@ -42,7 +41,7 @@ def NegaMax(state, height):
 
 
 
-	score = -999999 #approximation of -inf?
+	score = -999999 
 	for i in range(COL): #each COL represents a possible move, and so we consider all 7 moves if possible
 		board_copy = board.copy() 
 		if board_copy[0][i]=='-': #ensure it is possible to play this move
@@ -50,22 +49,29 @@ def NegaMax(state, height):
 				if board_copy[jk][i]=='X' or board_copy[jk][i]=='O':
 					board_copy[jk-1][i] = player_to_move
 					break
-			move = i #the curr move under consideration is the index i, or the ith column
+			move = i #the curr move under consideration is the index i
 			if player_to_move=='X': #setting the next player to move
 				player_to_move = 'O'
 			else:
 				player_to_move = 'X'
 			new_state = (name, player_to_move, board_copy) # packing tuple
 			c+=1 #increase negamax counter
-			value = - NegaMax(new_state, height-1)
-		if value > score:
+			value = - AlphaBeta(new_state, height-1,-beta,-alpha)
+		
+		if value >= score: #get max(score,value)
 			best_move = move
 			score = value
+
+		if score >= beta: # beta cut-off. No need to consider further movies
+			return score
+		if score > alpha:
+			alpha = score
+
 	return score
 
 
 if __name__ == '__main__':
 	state = p1.read()
 	h = int(input())
-	val = NegaMax(state,h)
+	val = AlphaBeta(state,h,-9999,9999)
 	print ('move:',best_move,'v:',val,'c:',c,'t:',t,'nt',nt)
