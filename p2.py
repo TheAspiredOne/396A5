@@ -1,3 +1,7 @@
+
+#Avery Tan(altan:1392212), Canopus Tong(canopus:1412275)
+
+
 import p1
 
 ROW=6
@@ -8,7 +12,7 @@ def evaluate_state(state):
 	O = 0
 	X = 0
 	full = 1
-	name, player_to_move, board = state
+	name, player_to_move, board,h = state
 	
 	for j in range(ROW):
 		for i in range(4): #check for horitzontal 4s

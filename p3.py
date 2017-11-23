@@ -1,3 +1,7 @@
+
+#Avery Tan(altan:1392212), Canopus Tong(canopus:1412275)
+
+
 import p1
 import p2
 
@@ -13,7 +17,7 @@ def calculate_heuristics(state):
 	ext4_3_O = 0
 	ext4_3_X = 0
 	eval_O = 0
-	name, player_to_move, board = state
+	name, player_to_move, board,h = state
 	X=list()
 	O=list()
 
@@ -25,34 +29,30 @@ def calculate_heuristics(state):
 
 			if (board[j][i]=='X' or board[j][i]=='-') and (board[j][i+1]=='X' or board[j][i+1]=='-') and (board[j][i+2]=='X' or board[j][i+2]=='-') and (board[j][i+3]=='X' or board[j][i+3]=='-'):
 				X.append([board[j][i], board[j][i+1], board[j][i+2],board[j][i+3]])
-				# print('1',j,i,board[j][i], board[j][i+1], board[j][i+2],board[j][i+3])
 
 
-			if j <3:			
+			if j <3: #check diagonals			
 				if (board[j][i]=='O' or board[j][i]=='-') and (board[j+1][i+1]=='O' or board[j+1][i+1]=='-') and (board[j+2][i+2]=='O' or board[j+2][i+2]=='-') and (board[j+3][i+3]=='O' or board[j+3][i+3]=='-'):
 					O.append([board[j][i],board[j+1][i+1],board[j+2][i+2],board[j+3][i+3]])
 				if (board[j][i]=='X' or board[j][i]=='-') and (board[j+1][i+1]=='X' or board[j+1][i+1]=='-') and (board[j+2][i+2]=='X' or board[j+2][i+2]=='-') and (board[j+3][i+3]=='X' or board[j+3][i+3]=='-'):
 					X.append([board[j][i],board[j+1][i+1],board[j+2][i+2],board[j+3][i+3]])
-					# print('2',j,i,board[j][i],board[j+1][i+1],board[j+2][i+2],board[j+3][i+3])
 
-
+					#check other diagonal
 				if (board[j+3][i]=='O' or board[j+3][i]=='-') and (board[j+2][i+1]=='O' or board[j+2][i+1]=='-') and (board[j+1][i+2]=='O' or board[j+1][i+2]=='-') and (board[j][i+3]=='O' or board[j][i+3]=='-'):
 					O.append([board[j+3][i],board[j+2][i+1],board[j+1][i+2],board[j][i+3]])
 				if (board[j+3][i]=='X' or board[j+3][i]=='-') and (board[j+2][i+1]=='X' or board[j+2][i+1]=='-') and (board[j+1][i+2]=='X' or board[j+1][i+2]=='-') and (board[j][i+3]=='X' or board[j][i+3]=='-'):
 					X.append([board[j+3][i],board[j+2][i+1],board[j+1][i+2],board[j][i+3]])
-					# print('here',j+3,i,board[j+3][i],board[j+2][i+1],board[j+1][i+2],board[j][i+3])
 
 
-		if j < 3:
+		if j < 3: #check for vertical positions
 			for q in range(COL):
 				# print(j,q,ROW)
 				if (board[j][q]=='O' or board[j][q]=='-') and (board[j+1][q]=='O' or board[j+1][q]=='-') and (board[j+2][q]=='O' or board[j+2][q]=='-') and (board[j+3][q]=='O' or board[j+3][q]=='-'):
 					O.append([board[j][q],board[j+1][q],board[j+2][q],board[j+3][q]])
 				if (board[j][q]=='X' or board[j][q]=='-') and (board[j+1][q]=='X' or board[j+1][q]=='-') and (board[j+2][q]=='X' or board[j+2][q]=='-') and (board[j+3][q]=='X' or board[j+3][q]=='-'):
 					X.append([board[j][q],board[j+1][q],board[j+2][q],board[j+3][q]])
-					# print('4',j,q,board[j][q],board[j+1][q],board[j+2][q],board[j+3][q])
 
-
+	#counting the respective number of Xs and Os
 	for i in X:
 		count = i.count('X')
 		if count == 1:
@@ -70,6 +70,8 @@ def calculate_heuristics(state):
 		elif count==3:
 			ext4_3_O+=1
 
+
+	#include evaluation in view of both players X or O.
 	eval_O = 1*(ext4_1_O - ext4_1_X)+ 10*(ext4_2_O- ext4_2_X)+ 40*(ext4_3_O-ext4_3_X)
 	eval_X = 1*(ext4_1_X - ext4_1_O)+ 10*(ext4_2_X- ext4_2_O)+ 40*(ext4_3_X-ext4_3_O)
 
